@@ -1,0 +1,68 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <title>Course Slideshow</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.1.0/reset.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.1.0/reset.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.1.0/plugin/markdown/markdown.css">
+
+
+    <style>
+      /* Overriding styles go here */
+      /* ... */
+    </style>
+</head>
+<body>
+<div class="reveal">
+    <div class="slides">
+        <!-- Slides will be inserted here dynamically -->
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.1.0/plugin/markdown/markdown.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.1.0/reveal.js"></script>
+
+<script>
+    // Initialization
+    // Fetch the Markdown content
+    fetch('course.md')
+        .then(response => response.text())
+        .then(text => {
+          // Split the text into sections
+          const sections = text.split('---');
+
+          // Insert each section as a slide
+          sections.forEach(section => {
+            // Create a section element
+            const sectionElem = document.createElement('section');
+            sectionElem.setAttribute('data-markdown', '');
+            sectionElem.setAttribute('data-separator', '^---$');
+            sectionElem.setAttribute('data-separator-vertical', '^--$');
+            sectionElem.setAttribute('data-separator-notes', '^Note:$');
+
+            // Create a script element
+            const scriptElem = document.createElement('script');
+            scriptElem.setAttribute('type', 'text/template');
+            scriptElem.textContent = section;
+
+            // Append the script to the section
+            sectionElem.appendChild(scriptElem);
+
+            // Append the section to the slides
+            document.querySelector('.slides').appendChild(sectionElem);
+          });
+
+          // Initialize Reveal.js after the slides have been inserted
+          Reveal.initialize({
+            // ...options...
+            plugins: [ RevealMarkdown ]
+          });
+        })
+        .catch(error => console.error(error));
+</script>
+</body>
+</html>

@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+	<title>Course Slideshow</title>
+
+	<link rel="stylesheet" href="dist/reset.css">
+	<link rel="stylesheet" href="dist/reveal.css">
+	<link rel="stylesheet" href="dist/theme/black.css">
+
+	<!-- Theme used for syntax highlighted code -->
+	<link rel="stylesheet" href="plugin/highlight/monokai.css">
+</head>
+<body>
+<div class="reveal">
+	<div class="slides">
+		<!-- Slides will be inserted here dynamically -->
+	</div>
+</div>
+
+<script src="dist/reveal.js"></script>
+<script src="plugin/notes/notes.js"></script>
+<script src="plugin/markdown/markdown.js"></script>
+<script src="plugin/highlight/highlight.js"></script>
+<script>
+	// Fetch the Markdown content
+	fetch('course.md')
+			.then(response => response.text())
+			.then(text => {
+				// Split the text into sections
+				const sections = text.split('---');
+
+				// Insert each section as a slide
+				sections.forEach(section => {
+					// Create a section element
+					const sectionElem = document.createElement('section');
+					sectionElem.setAttribute('data-markdown', '');
+					sectionElem.setAttribute('data-separator', '^---$');
+					sectionElem.setAttribute('data-separator-vertical', '^--$');
+					sectionElem.setAttribute('data-separator-notes', '^Note:$');
+
+					// Create a script element
+					const scriptElem = document.createElement('script');
+					scriptElem.setAttribute('type', 'text/template');
+					scriptElem.textContent = section;
+
+					// Append the script to the section
+					sectionElem.appendChild(scriptElem);
+
+					// Append the section to the slides
+					document.querySelector('.slides').appendChild(sectionElem);
+				});
+
+				// Initialize Reveal.js after the slides have been inserted
+				Reveal.initialize({
+					hash: true,
+					plugins: [ RevealMarkdown, RevealHighlight, RevealNotes ]
+				});
+			})
+			.catch(error => console.error(error));
+</script>
+</body>
+</html>
